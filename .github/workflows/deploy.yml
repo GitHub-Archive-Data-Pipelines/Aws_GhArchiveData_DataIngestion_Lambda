@@ -24,8 +24,7 @@ jobs:
       - name: 'Install Python Libraries'
         id: 'install_libraries'
         run: |
-          pip install \    
-              --target=src \
+          pip install -t src \
               --implementation cp \
               --only-binary=:all: --upgrade \
               -r requirements.txt
