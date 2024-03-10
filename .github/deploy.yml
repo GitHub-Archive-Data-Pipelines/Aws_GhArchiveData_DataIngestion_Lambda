@@ -3,6 +3,8 @@
 name: 'Build and upload to S3 Bucket'
 
 on:
+  workflow_dispatch:
+  
   push:
     branches:
       - main
