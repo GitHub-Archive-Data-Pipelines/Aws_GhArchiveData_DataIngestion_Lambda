@@ -1,0 +1,47 @@
+# Credits: https://www.linkedin.com/pulse/deploy-aws-lambda-function-using-s3-bucket-github-martinez-cartagena/
+#          https://repost.aws/knowledge-center/lambda-python-package-compatible
+name: 'Build and upload to S3 Bucket'
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  Build_and_Upload:
+    permissions:
+      actions: write
+      contents: write
+    
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: 'Install Python Libraries'
+        id: 'install_libraries'
+        run: |
+          pip install \    
+              --target=src \
+              --implementation cp \
+              --only-binary=:all: --upgrade \
+              -r requirements.txt
+
+      
+      - name: 'Create Zip File'
+        id: 'create_package'
+        run: |
+          zip -r $PACKAGE_NAME src
+
+
+      - name: 'Configure AWS Credentials'
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          aws-access-key-id: ${{ secrets.AWS_S3_BUCKET_USER_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_S3_BUCKET_USER_AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_S3_BUCKET_REGION }}
+
+
+      - name: 'Upload to S3 Bucket'
+        run: aws s3 cp ${{ steps.create_package.outputs.package_name }} s3://${{ secrets.AWS_S3_BUCKET_NAME }}
