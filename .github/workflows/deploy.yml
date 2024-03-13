@@ -53,5 +53,6 @@ jobs:
       - name: 'Update Lambda Function Code'
         run: |
           aws lambda update-function-code \
+           --function-name gh-archive-data-loader 
            --s3-bucket ${{ secrets.AWS_S3_BUCKET_NAME }} \
            --s3-key ${{ secrets.AWS_S3_BUCKET_KEY }}
