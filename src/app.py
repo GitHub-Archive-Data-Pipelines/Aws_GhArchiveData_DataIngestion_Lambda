@@ -5,12 +5,6 @@ import requests
 import boto3
 
 
-aws_access_key_id = os.environ.get('AWS_ACCESS_KEY_ID')
-aws_secret_access_key = os.environ.get('AWS_SECRET_ACCESS_KEY')
-aws_default_region = os.environ.get('AWS_DEFAULT_REGION')
-endpoint_url = os.environ.get('AWS_BUCKET')
-
-
 def handler(event, context):
     return download_gh_archive_hourly_data(event, context)
 
@@ -37,14 +31,7 @@ def download_gh_archive_hourly_data(event, context):
         month = date.split('-')[1]
         day = date.split('-')[2]
 
-        s3_client = boto3.client(
-            's3',
-            endpoint_url=endpoint_url,
-            aws_access_key_id=aws_access_key_id,
-            aws_secret_access_key=aws_secret_access_key,
-            aws_session_token=None,
-            verify=False
-        )
+        s3_client = boto3.client('s3')
 
         s3_key = f"gh-archives/year={year}/month={month}/day={day}/hour={hour}/{file_name}"
         s3_client.upload_file(file_path, dest_bucket_name, s3_key)
