@@ -1,3 +1,3 @@
 # Aws_GhArchiveData_Lambda
 
-By: Jorge Aguilar
+By: Jorge Aguilar Orozco
